@@ -49,6 +49,17 @@ class GroceryListTableViewController: UITableViewController {
     navigationItem.leftBarButtonItem = userCountBarButtonItem
     
     user = User(uid: "FakeId", email: "hungry@person.food")
+    ref.observe(.value, with: { snapshot in
+      var newItems: [GroceryItem] = []
+
+      for item in snapshot.children {
+        let groceryItem = GroceryItem(snapshot: item as! FIRDataSnapshot)
+        newItems.append(groceryItem)
+      }
+
+      self.items = newItems
+      self.tableView.reloadData()
+    })
   }
   
   // MARK: UITableView Delegate methods
