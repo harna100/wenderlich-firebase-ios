@@ -30,10 +30,20 @@ class LoginViewController: UIViewController {
   // MARK: Outlets
   @IBOutlet weak var textFieldLoginEmail: UITextField!
   @IBOutlet weak var textFieldLoginPassword: UITextField!
-  
+
+  override func viewDidLoad() {
+    super.viewDidLoad()
+
+    FIRAuth.auth()!.addStateDidChangeListener { auth, user in
+      if user != nil {
+        self.performSegue(withIdentifier: self.loginToList, sender: nil)
+      }
+     }
+  }
+
   // MARK: Actions
   @IBAction func loginDidTouch(_ sender: AnyObject) {
-    performSegue(withIdentifier: loginToList, sender: nil)
+    FIRAuth.auth()!.signIn(withEmail: textFieldLoginEmail.text!, password: textFieldLoginPassword.text!)
   }
   
   @IBAction func signUpDidTouch(_ sender: AnyObject) {
