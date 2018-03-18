@@ -48,7 +48,6 @@ class GroceryListTableViewController: UITableViewController {
     userCountBarButtonItem.tintColor = UIColor.white
     navigationItem.leftBarButtonItem = userCountBarButtonItem
     
-    user = User(uid: "FakeId", email: "hungry@person.food")
     ref.queryOrdered(byChild:"completed").observe(.value, with: { snapshot in
       var newItems: [GroceryItem] = []
 
@@ -60,6 +59,11 @@ class GroceryListTableViewController: UITableViewController {
       self.items = newItems
       self.tableView.reloadData()
     })
+
+    FIRAuth.auth()!.addStateDidChangeListener { auth, user in
+      guard let user = user else {return}
+      self.user = User(authData: user)
+     }
   }
   
   // MARK: UITableView Delegate methods
