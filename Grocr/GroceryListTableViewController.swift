@@ -49,7 +49,7 @@ class GroceryListTableViewController: UITableViewController {
     navigationItem.leftBarButtonItem = userCountBarButtonItem
     
     user = User(uid: "FakeId", email: "hungry@person.food")
-    ref.observe(.value, with: { snapshot in
+    ref.queryOrdered(byChild:"completed").observe(.value, with: { snapshot in
       var newItems: [GroceryItem] = []
 
       for item in snapshot.children {
