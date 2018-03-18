@@ -25,6 +25,8 @@ import UIKit
 class GroceryListTableViewController: UITableViewController {
 
   let ref = FIRDatabase.database().reference(withPath: "grocery-items")
+  let usersRef = FIRDatabase.database().reference(withPath: "online")
+
   
   // MARK: Constants
   let listToUsers = "ListToUsers"
@@ -63,6 +65,10 @@ class GroceryListTableViewController: UITableViewController {
     FIRAuth.auth()!.addStateDidChangeListener { auth, user in
       guard let user = user else {return}
       self.user = User(authData: user)
+
+      let currentUserRef = self.usersRef.child(self.user.uid)
+      currentUserRef.setValue(self.user.email)
+      currentUserRef.onDisconnectRemoveValue()
      }
   }
   
