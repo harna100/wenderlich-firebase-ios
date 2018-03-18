@@ -47,6 +47,18 @@ class OnlineUsersTableViewController: UITableViewController {
 
       self.tableView.insertRows(at: [indexPath], with: .top)
     })
+
+    usersRef.observe(.childRemoved, with:{ snapshot in
+      guard let emailToFind = snapshot.value as? String else {return}
+      for(index,email) in self.currentUsers.enumerated(){
+        if(email == emailToFind){
+          let indexPath = IndexPath(row: index, section: 0)
+          self.currentUsers.remove(at:index)
+          self.tableView.deleteRows(at: [indexPath], with: .fade)
+
+        }
+      }
+    })
   }
   
   // MARK: UITableView Delegate methods
